@@ -11,7 +11,7 @@ export class WeatherService {
   }
 
   getCityCode(location: string) {
-    const url = 'http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20geo.places%20where%20text%3D%22Place%20'
+    const url = 'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20geo.places%20where%20text%3D%22Place%20'
       + location + '%22&format=json';
 
     return this.http.get(url).map(res => res.json());
