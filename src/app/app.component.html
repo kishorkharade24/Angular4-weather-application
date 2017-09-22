@@ -1,0 +1,79 @@
+<header class="header">
+  <h1 class="header__title">Weather Report</h1>
+  <button id="butRefresh" class="headerButton" aria-label="Refresh"></button>
+  <button id="butAdd" class="headerButton" aria-label="Add"></button>
+</header>
+<br><br><br>
+<div class="container" style="scroll: auto">
+  <div class="card">
+    <div style="width: 70%; float: left">
+      <input type="text" placeholder="Enter city name"
+             [(ngModel)]="location"
+             style="padding: 1% 15%;box-sizing: border-box"
+             (keyup.enter)="showPlace()"
+             (change)="(location === '' || location === undefined) ? showPlaces = false : showPlaces = true"/>
+    </div>
+    <div>
+      <button class="btn btn-primary" (click)="showPlace()"
+              style="width: 13%"><i class="glyphicon glyphicon-search"></i></button>
+    </div>
+  </div>
+  <div *ngIf="showPlaces">
+    <div class="card">
+      <ul style="list-style: none; height: 200px; overflow-y: scroll;">
+        <li class="card" *ngFor="let city of cityList; let i = index" (click)="getCityWeather(city.woeid)">
+          <span><strong>Place : </strong> {{ city.name  + ', ' + city.state + ' (' + city.countryCode + ')' }}</span><br>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="clearfix"></div>
+  <main class="main">
+    <div class="card cardTemplate weather-forecast">
+      <div class="city-key" hidden>{{initialWeatherForecast.key}}</div>
+      <div class="card-last-updated" hidden></div>
+      <div class="location">{{initialWeatherForecast.label}}</div>
+      <div class="date"></div>
+      <div class="description"></div>
+      <div class="current">
+        <div class="visual">
+          <div class="icon {{getWeatherIconClass(initialWeatherForecast.channel.item.condition.code)}}"></div>
+          <div class="temperature">
+            <span class="value">{{Math.round((initialWeatherForecast.channel.item.condition.temp - 32) * 5 / 9)}}</span><span class="scale">°C</span>
+          </div>
+        </div>
+        <div class="description">
+          <div class="humidity">{{initialWeatherForecast.channel.atmosphere.humidity}}</div>
+          <div class="wind">
+            <span class="value">{{this.Math.round(initialWeatherForecast.channel.wind.speed)}}</span>
+            <span class="scale">mph</span>
+            <span class="direction"></span>°
+          </div>
+          <div class="sunrise">{{initialWeatherForecast.channel.astronomy.sunrise}}</div>
+          <div class="sunset">{{initialWeatherForecast.channel.astronomy.sunset}}</div>
+        </div>
+      </div>
+
+      <div class="future">
+        <div class="oneday" *ngFor="let day of initialWeatherForecast.channel.item.forecast; let i = index">
+
+          <div *ngIf="i < 8">
+            <div class="date">{{getDay(i)}}</div>
+            <div class="icon {{getWeatherIconClass(day.code)}}"></div>
+            <div class="temp-high">
+              <span class="value">{{this.Math.round((day.high - 32) * 5 / 9)}}</span>°
+            </div>
+            <div class="temp-low">
+              <span class="value">{{this.Math.round((day.low - 32) * 5 / 9)}}</span>°
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+
+</div>
